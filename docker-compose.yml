@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  medusa:
+    build: .
+    container_name: medusa-backend
+    ports:
+      - "9000:9000"
+    environment:
+      DATABASE_URL: postgres://postgres:123@postgres:5432/medusa-my-medusa-app
+      NODE_ENV: development
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  postgres:
+    image: postgres:15
+    container_name: medusa-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: medusa-my-medusa-app
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+
